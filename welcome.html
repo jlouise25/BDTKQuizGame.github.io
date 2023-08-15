@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BDTK QUIZLET</title>
+  <link rel="icon" href="../img/bdtkicon.png" type="image/x-icon">
+</head>
+<style>
+  @import url('https://fonts,googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap');
+  canvas {
+    position:absolute;
+    top:0;
+    left:0
+}
+  body {
+  overflow: hidden;
+  background: black;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.container {
+  position: relative;
+}
+
+.container .card {
+  position: relative;
+  width: 350px;
+  height: 500px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.7);
+  -webkit-box-shadow: 0px 0px 50px 0px rgba(87, 190, 85, 0.74);
+  -moz-box-shadow:    0px 0px 50px 0px rgba(87, 190, 85, 0.74);
+  box-shadow:         0px 0px 50px 0px rgba(87, 190, 85, 0.74);
+}
+
+
+.container .card:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #9bdc28;
+  clip-path: circle(150px at 80% 20%);
+  transition: 0.5s ease-in-out;
+}
+
+.container .card:hover:before {
+  clip-path: circle(300px at 80% -20%);
+}
+
+.container .card:after {
+  content: 'BDTK';
+  position: absolute;
+  top: 30%;
+  left: -15%;
+  font-size: 10em;
+  font-weight: 800;
+  font-style: italic;
+  color: rgba(255,255,255,0.14);
+  
+}
+
+.container .card .imgBx {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10000;
+  width: 100%;
+  height: 220px;
+  transition: 0.5s;
+}
+
+.container .card:hover .imgBx {
+  top: 0%;
+  transform: translateY(0%);
+}
+
+.container .card .imgBx img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) ;
+  width: 270px;
+}
+
+.container .card .contentBx {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100px;
+  text-align: center;
+  transition: 1s;
+  z-index: 10;
+}
+
+.container .card:hover .contentBx {
+  height: 210px;
+}
+
+.container .card .contentBx h2 {
+  position: relative;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #9bdc28;
+}
+
+.container .card .contentBx .size {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 20px;
+  transition: 0.5s;
+}
+
+.container .card .contentBx a {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #fff;
+  border-radius: 4px;
+  margin-top: 10px;
+  text-decoration: none;
+  font-weight: 600; 
+  color: #111;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: 0.5s;
+}
+
+.container .card .contentBx a {
+  opacity: 1;
+  transform: translateY(0px);
+  transition-delay: 0.75s;
+}
+
+.container .card:hover .contentBx a {
+  padding: 10px 20px;
+  background: #9bdc28;
+  border-radius: 4px;
+  margin-top: 10px;
+  color: #000;
+  transition-delay: 0.75s;
+} 
+
+</style>
+<body>
+      <canvas id ="canvas-club"></canvas>
+      <!-- CARD! -->
+     
+  <div class="container">
+     <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+    <div class="card">
+      <div class="imgBx">
+        <img src="../img/logo1.png" height="350" width="350">
+      </div>
+      <div class="contentBx">
+        <h2>BDTK QUIZLET</h2>
+        <br>
+        <br>
+        <br>
+        <a href="index.html">TAKE NOW!</a>
+      </div>
+    </div>
+  </div>
+</body>
+  <script>
+    var c = document.getElementById("canvas-club");
+var ctx = c.getContext("2d");
+var w = c.width = window.innerWidth;
+var h = c.height = window.innerHeight;
+var clearColor = 'rgba(0, 0, 0, .1)';
+var max = 30;
+var drops = [];
+
+function random(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+function O() {}
+
+O.prototype = {
+  init: function() {
+    this.x = random(0, w);
+    this.y = 0;
+    this.color = 'hsl(150, 100%, 50%)';
+    this.w = 2;
+    this.h = 1;
+    this.vy = random(4, 5);
+    this.vw = 3;
+    this.vh = 1;
+    this.size = 2;
+    this.hit = random(h * .8, h * .9);
+    this.a = 1;
+    this.va = .96;
+  },
+  draw: function() {
+    if (this.y > this.hit) {
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.y - this.h / 2);
+
+      ctx.bezierCurveTo(
+        this.x + this.w / 2, this.y - this.h / 2,
+        this.x + this.w / 2, this.y + this.h / 2,
+        this.x, this.y + this.h / 2);
+
+      ctx.bezierCurveTo(
+        this.x - this.w / 2, this.y + this.h / 2,
+        this.x - this.w / 2, this.y - this.h / 2,
+        this.x, this.y - this.h / 2);
+
+      ctx.strokeStyle = 'hsla(150, 100%, 50%, '+this.a+')';
+      ctx.stroke();
+      ctx.closePath();
+      
+    } else {
+      ctx.fillStyle = this.color;
+      ctx.fillRect(this.x, this.y, this.size, this.size * 5);
+    }
+    this.update();
+  },
+  update: function() {
+    if(this.y < this.hit){
+      this.y += this.vy;
+    } else {
+      if(this.a > .03){
+        this.w += this.vw;
+        this.h += this.vh;
+        if(this.w > 100){
+          this.a *= this.va;
+          this.vw *= .98;
+          this.vh *= .98;
+        }
+      } else {
+        this.init();
+      }
+    }
+    
+  }
+}
+
+function resize(){
+  w = c.width = window.innerWidth;
+  h = c.height = window.innerHeight;
+}
+
+function setup(){
+  for(var i = 0; i < max; i++){
+    (function(j){
+      setTimeout(function(){
+        var o = new O();
+        o.init();
+        drops.push(o);
+      }, j * 200)
+    }(i));
+  }
+}
+
+
+function anim() {
+  ctx.fillStyle = clearColor;
+  ctx.fillRect(0,0,w,h);
+  for(var i in drops){
+    drops[i].draw();
+  }
+  requestAnimationFrame(anim);
+}
+
+
+window.addEventListener("resize", resize);
+
+setup();
+anim();
+
+  </script>
+</html>
